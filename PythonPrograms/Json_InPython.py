@@ -6,11 +6,11 @@ d= {
     "city":"Pune"
 }
 
-text = json.dumps(d) #not dic is json
+text = json.dumps(d)          #convert dic is json
 print(text)
-print(type(text)) #<class 'str'>
+print(type(text))             #<class 'str'>
 
-back = json.loads(text) #json is dic
+back = json.loads(text)       #json is dic
 print(back["city"])
 
-print(type(back)) #<class 'dict'>
+print(type(back))             #<class 'dict'>
