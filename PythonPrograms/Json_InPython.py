@@ -14,3 +14,13 @@ back = json.loads(text)       #json is dic
 print(back["city"])
 
 print(type(back))             #<class 'dict'>
+
+print("------------")
+
+response_data = {
+ "answer": "An API lets applications communicate.",
+ "success": True
+}
+
+json_text = json.dumps(response_data, indent=2)   #indent=2 for pretty print (to add spaces)
+print(json_text)
