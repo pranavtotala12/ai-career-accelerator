@@ -1,83 +1,3 @@
-#Explorer = create file
-#Editor = write code
-#Terminal = run server
-
-# from fastapi import FastAPI
-# from pydantic import BaseModel, Field
-
-# app = FastAPI()
-
-# class AskRequest(BaseModel):
-#     question: str = Field(min_length=1, max_length=4000)
-
-# @app.post("/ask")
-# def ask(request: AskRequest):
-#     cleaned_question = request.question.strip()
-
-#     return {
-#         "question": cleaned_question,
-#         "answer": "LLM will be connected next"
-#     }
-
-# @app.get("/home")
-# def home():
-#     return {
-#         "message": "Week2 AI service is running in home"
-#     }   
-
-# @app.get("/awayhome")
-# def awayhome():
-#     return {
-#         "message": "Week2 AI service is running in awayhome"
-#     }
-
-######################################################################################
-
-# import os
-# from dotenv import load_dotenv
-# from fastapi import FastAPI, HTTPException
-# from pydantic import BaseModel, Field
-# #from openai import OpenAI
-# from google import genai
-# load_dotenv()
-# api_key = os.getenv("GEMINI_API_KEY")
-# model = os.getenv("GEMINI_MODEL")
-# if not api_key:
-#     raise RuntimeError("GEMINI_API_KEY is missing")
-# client = genai.Client   (api_key=api_key)
-# app = FastAPI()
-
-
-# @app.post("/ask")
-# def ask(request: AskRequest):
-#     cleaned_question = request.question.strip()
-
-#     if not cleaned_question:
-#         raise HTTPException(
-#             status_code=400,
-#             detail="Question cannot be blank"
-#         )
-
-#     try:
-#         response = client.models.generate_content(
-#             model=model,
-#             contents=cleaned_question
-#         )
-#     except Exception:
-#         raise HTTPException(
-#             status_code=502,
-#             detail="Gemini request failed. Please try again."
-#         )
-
-#     return {
-#         "question": cleaned_question,
-#         "answer": response.text,
-#         "model": model
-#     }
-
-
-###############################################################################################
-
 import os
 from pathlib import Path
 import json
@@ -118,6 +38,7 @@ class AskRequest(BaseModel):
         le=2000
     )
 
+# 3. Define answer body
 class AnswerData(BaseModel):
     answer: str
     topic: str
@@ -129,6 +50,13 @@ def ask(request: AskRequest):
 
     cleaned_question = request.question.strip()
 
+    # Validate question after removing spaces
+    if len(cleaned_question) < 5:
+        raise HTTPException(
+            status_code=400,
+            detail="Question must have at least 5 characters"
+        )
+
     structured_prompt = f"""
     Answer the question.
     Return JSON only with:
@@ -137,13 +65,6 @@ def ask(request: AskRequest):
     - confidence: number from 0 to 1
     Question: {cleaned_question}
     """
-
-    # Validate question after removing spaces
-    if len(cleaned_question) < 5:
-        raise HTTPException(
-            status_code=400,
-            detail="Question must have at least 5 characters"
-        )
 
     # 5. Call Gemini
     try:
