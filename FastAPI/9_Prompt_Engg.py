@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field, ValidationError
 from google import genai
 from google.genai import types
 
-from Structured_Prompt import build_triage_prompt
+from Structured_Prompt_8 import build_triage_prompt
 
 # 1. Load configuration
 env_path = Path(__file__).resolve().parent / ".env"
